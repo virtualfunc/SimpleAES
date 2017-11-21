@@ -1,2 +1,2 @@
 # SimpleAES
-Simples AES implementation in Java.
+Simple AES implementation in Java.
