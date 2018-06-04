@@ -33,6 +33,31 @@ public class SimpleAES {
 	}
 
 	/**
+	 * Creates a cryptographic hash string from a byte array.
+	 *
+	 * @param bytes the source data
+	 * @return
+	 */
+	public static String getHash(byte[] bytes) {
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+			byte[] hash = digest.digest(bytes);
+			StringBuilder sb = new StringBuilder();
+
+			for(int i = 0; i < hash.length; i++) {
+				sb.append(String.format("%02x", hash[i]));
+			}
+
+			return sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+
+		}
+
+		return null;
+	}
+
+	/**
 	 * Default constructor that initializes with a random key.
 	 */
 	public SimpleAES() {
@@ -138,8 +163,12 @@ public class SimpleAES {
 	 *
 	 * @param inputStream encrypted input stream
 	 * @param outputStream plain text output stream
+	 *
+	 * @return true if succeeded, false if failed
 	 */
-	public void decrypt(InputStream inputStream, OutputStream outputStream) {
+	public boolean decrypt(InputStream inputStream, OutputStream outputStream) {
+		boolean status = false;
+
 		try {
 			// first load initialization vector
 			byte[] iv = new byte[INITIALIZATION_VECTOR_SIZE_BYTES];
@@ -161,6 +190,10 @@ public class SimpleAES {
 			}
 
 			cos.close();
+			inputStream.close();
+			outputStream.close();
+
+			status = true;
 		}
 		catch (InvalidAlgorithmParameterException e) {
 			e.printStackTrace();
@@ -171,6 +204,8 @@ public class SimpleAES {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		return status;
 	}
 
 	/**
@@ -178,8 +213,12 @@ public class SimpleAES {
 	 *
 	 * @param inputStream plain text input stream.
 	 * @param outputStream encrypted output stream.
+	 *
+	 * @return true if succeeded, false if failed
 	 */
-	public void encrypt(InputStream inputStream, OutputStream outputStream) {
+	public boolean encrypt(InputStream inputStream, OutputStream outputStream) {
+		boolean status = false;
+
 		try {
 			// first create and write the initialization vector
 			IvParameterSpec initializationVector = createRandomInitializationVector();
@@ -201,6 +240,10 @@ public class SimpleAES {
 			}
 
 			cos.close();
+			inputStream.close();
+			outputStream.close();
+
+			status = true;
 		}
 		catch (InvalidAlgorithmParameterException e) {
 			e.printStackTrace();
@@ -211,6 +254,8 @@ public class SimpleAES {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		return status;
 	}
 
 	/**
