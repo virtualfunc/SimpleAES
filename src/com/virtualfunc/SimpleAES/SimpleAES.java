@@ -181,7 +181,7 @@ public class SimpleAES {
 
 			// decrypt input stream to output stream
 			CipherOutputStream cos = new CipherOutputStream(outputStream, cipher);
-			byte[] buffer = new byte[8];
+			byte[] buffer = new byte[8192];
 			int i = inputStream.read(buffer);
 
 			while (i != -1) {
@@ -230,7 +230,7 @@ public class SimpleAES {
 
 			// encrypt input stream to output stream
 			CipherOutputStream cos = new CipherOutputStream(outputStream, cipher);
-			byte[] buffer = new byte[8];
+			byte[] buffer = new byte[8192];
 			int i = inputStream.read(buffer);
 
 			while (i != -1)
